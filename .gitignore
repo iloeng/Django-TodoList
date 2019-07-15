@@ -1,0 +1,12 @@
+##ignore below files##
+*.pyc
+/log/*.log
+/report/*.html
+
+# pycharm 
+.idea/
+
+# sqlite
+*.sqlite3
+
+
