@@ -1,0 +1,38 @@
+{#updatatodo.html#}
+{% extends 'index.html' %}
+
+{% block title %} update Todo {% endblock %}
+
+{% block todo %}
+    <form action="{% url 'update' todo.todo_id %}" method="post">{% csrf_token %}
+        <div class="modal-body">
+            <textarea name="todo" class="txtodo" id="txtodo"
+                      required="required">{{ todo.content }}</textarea>
+            <fieldset>
+                <input type="radio" name="owner" value="卢敏"/>
+                <span class="label label-warning">卢敏</span>
+                {#                        </label>#}
+                {#                        <label class="radio inline" for="owner">#}
+                <input type="radio" name="owner" value="孙贝"/>
+                <span class="label label-warning">孙贝</span>
+                <input type="radio" name="owner" value="刘瑶"/>
+                <span class="label label-warning">刘瑶</span>
+                <input type="radio" name="owner" value="明倩"/>
+                <span class="label label-warning">明倩</span>
+                <input type="radio" name="owner" value="家斌"/>
+                <span class="label label-warning">家斌</span>
+                <input type="radio" name="owner" value="晓娟"/>
+                <span class="label label-warning">晓娟</span>
+                <input type="radio" name="owner" value="碧莹"/>
+                <span class="label label-warning">碧莹</span>
+                <input type="radio" name="owner" value="张真"/>
+                <span class="label label-warning">张真</span>
+            </fieldset>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button id="send" class="btn btn-success" type="submit" name="submit">Save changes
+            </button>
+        </div>
+    </form>
+{% endblock %}

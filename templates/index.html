@@ -3,7 +3,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8"/>
-    <title>Title</title>
+    <title>{% block titile %}Todo list{% endblock %}</title>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
@@ -67,112 +67,229 @@
 <body>
 <div class="container">
     <div class="row clearfix">
-        <h2 class="text-success">待办事项</h2><br/>
-        <div class="col-md-12 column">
-            {#            <h3>#}
-            {#                {% for todo in todolist %}#}
-            {#                    <a href="#">{{ todo.owner }}</a>#}
-            {#                {% endfor %}#}
-            {#            </h3>#}
-            <div class="panel panel-danger">
-                <div class="panel-heading">
-                    待办
-                </div>
-                <div id="panel-element-276643" class="panel-collapse">
-                    <div class="panel-body">
-                        <div class="panel panel-default">
-                            <!-- Table -->
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Owner</th>
-                                    <th>Content</th>
-                                    <th>Time</th>
-                                    <th>Operation</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for todo in todolist %}
+        {% block todo %}
+            <h2 class="text-success">待办事项</h2><br/>
+            <div class="col-md-12 column">
+                {#            <h3>#}
+                {#                {% for todo in todolist %}#}
+                {#                    <a href="#">{{ todo.owner }}</a>#}
+                {#                {% endfor %}#}
+                {#            </h3>#}
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        待办 &nbsp;&nbsp;
+                        <small>共计：{{ todolist | length }}</small>
+                    </div>
+                    <div id="panel-element-276643" class="panel-collapse">
+                        <div class="panel-body">
+                            <div class="panel panel-default">
+                                <!-- Table -->
+                                <table class="table">
+                                    <thead>
                                     <tr>
-                                        <th scope="row">{{ todo.todo_id }}</th>
-                                        <td class="todo">{{ todo.owner }}</td>
-                                        <td class="todo">{{ todo.content }}</td>
-                                        <td class="todo">{{ todo.add_time }}</td>
-                                        <td class="te">
-                                            <div class="span2">
-                                                <a href="{% url 'finish' todo.todo_id %}"
-                                                   title="finish"><i
-                                                        class="glyphicon glyphicon-ok"></i></a>
-                                                <a href="{% url 'update' todo.todo_id %}"
-                                                   title="edit"><i
-                                                        class="glyphicon glyphicon-edit"></i></a>
-                                                <a href="{% url 'delete' todo.todo_id %}"
-                                                   title="delete"><i
-                                                        class="glyphicon glyphicon-trash"></i></a>
-                                            </div>
-                                        </td>
+                                        {#                                    <th>ID</th>#}
+                                        <th>Owner</th>
+                                        <th>Content</th>
+                                        <th>Time</th>
+                                        <th>Operation</th>
                                     </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    {% for todo in todolist %}
+                                        <tr>
+                                            {#                                        <th scope="row">{{ todo.todo_id }}</th>#}
+                                            <td class="todo"><a
+                                                    href="{% url 'user' todo.owner %}">{{ todo.owner }}</a>
+                                            </td>
+                                            <td class="todo">{{ todo.content }}</td>
+                                            <td class="todo">{{ todo.add_time }}</td>
+                                            <td class="te">
+                                                <div class="span2">
+                                                    <a href="{% url 'success' todo.todo_id %}"
+                                                       title="复现完成"><i
+                                                            class="glyphicon glyphicon-check"></i></a>
+                                                    <a href="{% url 'failed' todo.todo_id %}"
+                                                       title="未复现"><i
+                                                            class="glyphicon glyphicon-ok"></i></a>
+                                                    <a href="{% url 'update' todo.todo_id %}"
+                                                       title="edit"><i
+                                                            class="glyphicon glyphicon-edit"></i></a>
+                                                    <a href="{% url 'delete' todo.todo_id %}"
+                                                       title="delete"><i
+                                                            class="glyphicon glyphicon-trash"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
 
-                        </div>
-                        <div>
-                            <a class="btn btn-success" href="#myModal" role="button"
-                               data-toggle="modal">
-                                <i class="glyphicon glyphicon-plus-sign icon-white"></i>
-                                <span> ADD</span>
-                            </a>
+                            </div>
+                            <div>
+                                <a class="btn btn-success" href="#myModal" role="button"
+                                   data-toggle="modal">
+                                    <i class="glyphicon glyphicon-plus-sign icon-white"></i>
+                                    <span> ADD</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <a rel="nofollow" class="panel-title collapsed" data-toggle="collapse"
-                       data-parent="#panel-640405" href="#panel-element-256611">完成</a>
-                </div>
-                <div id="panel-element-256611" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="panel panel-default">
-                            <!-- Table -->
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Owner</th>
-                                    <th>Content</th>
-                                    <th>Resolved Time</th>
-                                    <th>Operation</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for todo in finished %}
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <a rel="nofollow" class="panel-title collapsed" data-toggle="collapse"
+                           data-parent="#panel-640405" href="#panel-element-256619">复现完成&nbsp;&nbsp;
+                            <small>共计：{{ reappear | length }}</small>
+                        </a>
+                    </div>
+                    <div id="panel-element-256619" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="panel panel-default">
+                                <!-- Table -->
+                                <table class="table">
+                                    <thead>
                                     <tr>
-                                        <th scope="row">{{ todo.todo_id }}</th>
-                                        <td class="todo">{{ todo.owner }}</td>
-                                        <td class="ftodo muted">{{ todo.content }}</td>
-                                        <td class="todo">{{ todo.resolve_time }}</td>
-                                        <td class="te">
-                                            <div class="span2">
-                                                <a href="{% url 'finish' todo.todo_id %}"
-                                                   title="finish"><i
-                                                        class="glyphicon glyphicon-ok"></i></a>
-                                                <a href="{% url 'update' todo.todo_id %}"
-                                                   title="edit"><i
-                                                        class="glyphicon glyphicon-edit"></i></a>
-                                            </div>
-                                        </td>
+                                        {#                                    <th>ID</th>#}
+                                        <th>Owner</th>
+                                        <th>Content</th>
+                                        <th>Add</th>
+                                        <th>Resolved</th>
+                                        <th>Operation</th>
                                     </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    {% for todo in reappear %}
+                                        <tr>
+                                            {#                                        <th scope="row">{{ todo.todo_id }}</th>#}
+                                            {#                                        <th scope="row">{{ todo.todo_id }}</th>#}
+                                            <td class="todo"><a
+                                                    href="{% url 'user' todo.owner %}">{{ todo.owner }}</a>
+                                            </td>
+                                            <td class="ftodo muted">{{ todo.content }}</td>
+                                            <td class="todo">{{ todo.add_time }}</td>
+                                            <td class="todo">{{ todo.resolve_time }}</td>
+                                            <td class="te">
+                                                <div class="span2">
+                                                    <a href="{% url 'back' todo.todo_id %}"
+                                                       title="reset"><i
+                                                            class="glyphicon glyphicon-refresh"></i></a>
+                                                    {#                                                <a href="{% url 'update' todo.todo_id %}"#}
+                                                    {#                                                   title="edit"><i#}
+                                                    {#                                                        class="glyphicon glyphicon-edit"></i></a>#}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <a rel="nofollow" class="panel-title collapsed" data-toggle="collapse"
+                           data-parent="#panel-640406" href="#panel-element-256618">复现失败&nbsp;&nbsp;
+                            <small>共计：{{ unreappear | length }}</small>
+                        </a>
+                    </div>
+                    <div id="panel-element-256618" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="panel panel-default">
+                                <!-- Table -->
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        {#                                    <th>ID</th>#}
+                                        <th>Owner</th>
+                                        <th>Content</th>
+                                        <th>Add</th>
+                                        <th>Resolved</th>
+                                        <th>Operation</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for todo in unreappear %}
+                                        <tr>
+                                            {#                                        <th scope="row">{{ todo.todo_id }}</th>#}
+                                            {#                                        <th scope="row">{{ todo.todo_id }}</th>#}
+                                            <td class="todo"><a
+                                                    href="{% url 'user' todo.owner %}">{{ todo.owner }}</a>
+                                            </td>
+                                            <td class="ftodo muted">{{ todo.content }}</td>
+                                            <td class="todo">{{ todo.add_time }}</td>
+                                            <td class="todo">{{ todo.resolve_time }}</td>
+                                            <td class="te">
+                                                <div class="span2">
+                                                    <a href="{% url 'back' todo.todo_id %}"
+                                                       title="reset"><i
+                                                            class="glyphicon glyphicon-refresh"></i></a>
+                                                    {#                                                <a href="{% url 'update' todo.todo_id %}"#}
+                                                    {#                                                   title="edit"><i#}
+                                                    {#                                                        class="glyphicon glyphicon-edit"></i></a>#}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <a rel="nofollow" class="panel-title collapsed" data-toggle="collapse"
+                           data-parent="#panel-640405" href="#panel-element-256611">完成&nbsp;&nbsp;
+                            <small>共计：{{ finished | length }}</small>
+                        </a>
+                    </div>
+                    <div id="panel-element-256611" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="panel panel-default">
+                                <!-- Table -->
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        {#                                    <th>ID</th>#}
+                                        <th>Owner</th>
+                                        <th>Content</th>
+                                        <th>Add</th>
+                                        <th>Resolved</th>
+                                        <th>Operation</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for todo in finished %}
+                                        <tr>
+                                            {#                                        <th scope="row">{{ todo.todo_id }}</th>#}
+                                            {#                                        <th scope="row">{{ todo.todo_id }}</th>#}
+                                            <td class="todo"><a
+                                                    href="{% url 'user' todo.owner %}">{{ todo.owner }}</a>
+                                            </td>
+                                            <td class="ftodo muted">{{ todo.content }}</td>
+                                            <td class="todo">{{ todo.add_time }}</td>
+                                            <td class="todo">{{ todo.resolve_time }}</td>
+                                            <td class="te">
+                                                <div class="span2">
+                                                    <a href="{% url 'back' todo.todo_id %}"
+                                                       title="reset"><i
+                                                            class="glyphicon glyphicon-refresh"></i></a>
+                                                    {#                                                <a href="{% url 'update' todo.todo_id %}"#}
+                                                    {#                                                   title="edit"><i#}
+                                                    {#                                                        class="glyphicon glyphicon-edit"></i></a>#}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {% endblock %}
     </div>
 </div>
 
@@ -213,31 +330,31 @@
                     <textarea name="todo" class="txtodo" id="txtodo" required="required">
                     </textarea>
                     <fieldset>
-{#                        <label class="radio inline" for="owner">#}
-                            <input type="radio" name="owner" value="卢敏"/>
-                            <span class="label label-warning">卢敏</span>
-{#                        </label>#}
-{#                        <label class="radio inline" for="owner">#}
-                            <input type="radio" name="owner" value="孙贝"/>
-                            <span class="label label-warning">孙贝</span>
+                        {#                        <label class="radio inline" for="owner">#}
+                        <input type="radio" name="owner" value="卢敏"/>
+                        <span class="label label-warning">卢敏</span>
+                        {#                        </label>#}
+                        {#                        <label class="radio inline" for="owner">#}
+                        <input type="radio" name="owner" value="孙贝"/>
+                        <span class="label label-warning">孙贝</span>
                         <input type="radio" name="owner" value="刘瑶"/>
-                            <span class="label label-warning">刘瑶</span>
+                        <span class="label label-warning">刘瑶</span>
                         <input type="radio" name="owner" value="明倩"/>
-                            <span class="label label-warning">明倩</span>
+                        <span class="label label-warning">明倩</span>
                         <input type="radio" name="owner" value="家斌"/>
-                            <span class="label label-warning">家斌</span>
+                        <span class="label label-warning">家斌</span>
                         <input type="radio" name="owner" value="晓娟"/>
-                            <span class="label label-warning">晓娟</span>
+                        <span class="label label-warning">晓娟</span>
                         <input type="radio" name="owner" value="碧莹"/>
-                            <span class="label label-warning">碧莹</span>
+                        <span class="label label-warning">碧莹</span>
                         <input type="radio" name="owner" value="张真"/>
-                            <span class="label label-warning">张真</span>
-{#                        </label>#}
-{#                        <div class="input-group">#}
-{#                        <span class="input-group-addon">#}
-{#                            <input type="radio" aria-label="...">#}
-                       </span>{#<input type="text" class="form-control" aria-label="...">#}
-{#                        </div><!-- /input-group -->#}
+                        <span class="label label-warning">张真</span>
+                        {#                        </label>#}
+                        {#                        <div class="input-group">#}
+                        {#                        <span class="input-group-addon">#}
+                        {#                            <input type="radio" aria-label="...">#}
+                        {#<input type="text" class="form-control" aria-label="...">#}
+                        {#                        </div><!-- /input-group -->#}
                     </fieldset>
                 </div>
                 <div class="modal-footer">
