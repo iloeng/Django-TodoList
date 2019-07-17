@@ -7,17 +7,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import ToDo
 # from .forms import ToDoForm
 
-USER = {
-    '卢敏': 1,
-    '孙贝': 2,
-    '刘瑶': 3,
-    '明倩': 4,
-    '家斌': 5,
-    '晓娟': 6,
-    '碧莹': 7,
-    '张真': 8
-}
-
 
 def todolist(request):
     todolist = ToDo.objects.filter(status='No').order_by('-owner')
