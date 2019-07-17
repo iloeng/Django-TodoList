@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 from .models import ToDo
-from .forms import ToDoPostForm
+# from .forms import ToDoForm
 
 USER = {
     '卢敏': 1,
@@ -46,37 +46,29 @@ def todolist(request):
     return render(request, 'index.html', dicts)
 
 
-def todofinish(request, id=''):
-    todo = ToDo.objects.get(todo_id=id)
-    if todo.status == 'No':
-        todo.status = 'Yes'
-        todo.save()
-        return HttpResponseRedirect('/')
-    todolist = ToDo.objects.filter(status='No')
-    return render(request, 'simple-todo.html', {'todolist': todolist})
-
-
 def finish_reappear(request, id):
     todo = ToDo.objects.get(todo_id=id)
-    if todo.status == 'No':
-        todo.status = 'Yes'
-        todo.finish = 'Yes'
-        todo.save()
-        return HttpResponseRedirect('/')
-    todolist = ToDo.objects.filter(status='No')
-    finishtodo = ToDo.objects.filter(status='Yes')
+    if request.method == 'POST':
+        if todo.status == 'No':
+            invested = float(request.POST['investe'])
+            todo.status = 'Yes'
+            todo.finish = 'Yes'
+            todo.invested_time = invested
+            todo.save()
+            return HttpResponseRedirect('/')
     return HttpResponseRedirect('/')
 
 
 def finish_unreappear(request, id):
     todo = ToDo.objects.get(todo_id=id)
-    if todo.status == 'No':
-        todo.status = 'Yes'
-        todo.finish = 'No'
-        todo.save()
-        return HttpResponseRedirect('/')
-    todolist = ToDo.objects.filter(status='No')
-    finishtodo = ToDo.objects.filter(status='Yes')
+    if request.method == 'POST':
+        if todo.status == 'No':
+            invested = float(request.POST['invested'])
+            todo.status = 'Yes'
+            todo.finish = 'No'
+            todo.invested_time = invested
+            todo.save()
+            return HttpResponseRedirect('/')
     return HttpResponseRedirect('/')
 
 
@@ -85,6 +77,8 @@ def todoback(request, id):
     if todo.status == 'Yes':
         todo.status = 'No'
         todo.finish = 'No'
+
+        todo.invested_time = 0.0
         todo.save()
         return HttpResponseRedirect('/')
     todolist = ToDo.objects.filter(status='No')
@@ -93,7 +87,7 @@ def todoback(request, id):
 
 
 def tododelete(request, id):
-    todo = ToDo.objects.get(todu_id=id)
+    todo = ToDo.objects.get(todo_id=id)
     if todo:
         todo.delete()
         return HttpResponseRedirect('/')
@@ -113,7 +107,7 @@ def add_todo(request):
         todo.save()
         todolist = ToDo.objects.filter(status='No')
         finishtodos = ToDo.objects.filter(status='Yes')
-        return render(request, 'index.html', {'todolist': todolist, 'finishtodos': finishtodos})
+        return HttpResponseRedirect('/')
 
     else:
         todolist = ToDo.objects.filter(status='No')
@@ -134,6 +128,7 @@ def update_todo(request, id):
         todo.content = atodo
         todo.status = 'No'
         todo.finish = 'No'
+        todo.invested_time = 0.0
         todo.save()
         todolist = ToDo.objects.filter(status='No')
         finishtodos = ToDo.objects.filter(status='Yes')
@@ -147,7 +142,6 @@ def update_todo(request, id):
 
 
 def user_page(request, username):
-    # todos = ToDo.objects.filter(owner=username)
     todolist = ToDo.objects.filter(status='No', owner=username)
     finishtodos = ToDo.objects.filter(status='Yes', owner=username)
     reappear = ToDo.objects.filter(status='Yes', finish='Yes', owner=username).order_by('-resolve_time')

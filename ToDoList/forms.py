@@ -15,8 +15,11 @@ from django import forms
 from models import ToDo
 
 
-class ToDoPostForm(forms.ModelForm):
-    class Meta:
-        model = ToDo
-        fields = ('content',)
+# class ToDoPostForm(forms.ModelForm):
+#     class Meta:
+#         model = ToDo
+#         fields = ('content',)
+
+class ToDoForm(forms.Form):
+    invested_time = forms.DecimalField(max_digits=5, decimal_places=2, default=0.0)
 

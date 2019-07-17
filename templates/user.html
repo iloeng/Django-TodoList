@@ -103,12 +103,65 @@
                                         <td class="todo">{{ todo.add_time }}</td>
                                         <td class="te">
                                             <div class="span2">
-                                                <a href="{% url 'success' todo.todo_id %}"
-                                                   title="复现完成"><i
-                                                        class="glyphicon glyphicon-check"></i></a>
-                                                <a href="{% url 'failed' todo.todo_id %}"
-                                                   title="未复现"><i
-                                                        class="glyphicon glyphicon-ok"></i></a>
+                                                <script type="text/javascript">
+                                                        function sendtwitter1() {
+                                                            $('#myModal1 form').submit(function () {
+                                                                $.ajax({
+                                                                    type: "POST",
+                                                                    data: $('#myModal1 form').serialize(),
+                                                                    url: "{% url 'success' todo.todo_id %}",
+                                                                    cache: false,
+                                                                    dataType: "html",
+                                                                    success: function (html, textStatus) {
+                                                                        $('#todo').replaceWith(html);
+                                                                        $('#myModal1').modal('hide');
+                                                                        $('#myModal1 form')[0].reset();
+                                                                    },
+                                                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                                                        $('#comment_form form').replaceWith('Your comment was unable to be posted at this time.  We apologise for the inconvenience.');
+                                                                    }
+                                                                });
+                                                                return false;
+                                                            });
+                                                        }
+
+                                                        $(document).ready(function () {
+                                                            sendtwitter1();
+                                                        })
+                                                    </script>
+
+                                                    <a title="复现完成" rel="nofollow"
+                                                       href="#myModal1" data-toggle="modal" class="button">
+                                                        <i class="glyphicon glyphicon-check"></i></a>
+                                                    <script type="text/javascript">
+                                                        function sendtwitter2() {
+                                                            $('#myModal2 form').submit(function () {
+                                                                $.ajax({
+                                                                    type: "POST",
+                                                                    data: $('#myModal2 form').serialize(),
+                                                                    url: "{% url 'failed' todo.todo_id %}",
+                                                                    cache: false,
+                                                                    dataType: "html",
+                                                                    success: function (html, textStatus) {
+                                                                        $('#todo').replaceWith(html);
+                                                                        $('#myModal2').modal('hide');
+                                                                        $('#myModal2 form')[0].reset();
+                                                                    },
+                                                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                                                        $('#comment_form form').replaceWith('Your comment was unable to be posted at this time.  We apologise for the inconvenience.');
+                                                                    }
+                                                                });
+                                                                return false;
+                                                            });
+                                                        }
+
+                                                        $(document).ready(function () {
+                                                            sendtwitter2();
+                                                        })
+                                                    </script>
+                                                    <a title="复现失败" rel="nofollow"
+                                                       href="#myModal2" data-toggle="modal" class="button">
+                                                        <i class="glyphicon glyphicon-ok"></i></a>
                                                 <a href="{% url 'update' todo.todo_id %}"
                                                    title="edit"><i
                                                         class="glyphicon glyphicon-edit"></i></a>
@@ -152,6 +205,7 @@
                                     <th>Content</th>
                                     <th>Add</th>
                                     <th>Resolved</th>
+                                    <th>WorkTime</th>
                                     <th>Operation</th>
                                 </tr>
                                 </thead>
@@ -165,6 +219,7 @@
                                         <td class="ftodo muted">{{ todo.content }}</td>
                                         <td class="todo">{{ todo.add_time }}</td>
                                         <td class="todo">{{ todo.resolve_time }}</td>
+                                        <td class="todo">{{ todo.invested_time }}</td>
                                         <td class="te">
                                             <div class="span2">
                                                 <a href="{% url 'back' todo.todo_id %}"
@@ -202,6 +257,7 @@
                                     <th>Content</th>
                                     <th>Add</th>
                                     <th>Resolved</th>
+                                    <th>WorkTime</th>
                                     <th>Operation</th>
                                 </tr>
                                 </thead>
@@ -215,6 +271,7 @@
                                         <td class="ftodo muted">{{ todo.content }}</td>
                                         <td class="todo">{{ todo.add_time }}</td>
                                         <td class="todo">{{ todo.resolve_time }}</td>
+                                        <td class="todo">{{ todo.invested_time }}</td>
                                         <td class="te">
                                             <div class="span2">
                                                 <a href="{% url 'back' todo.todo_id %}"
@@ -252,6 +309,7 @@
                                     <th>Content</th>
                                     <th>Add</th>
                                     <th>Resolved</th>
+                                    <th>WorkTime</th>
                                     <th>Operation</th>
                                 </tr>
                                 </thead>
@@ -265,6 +323,7 @@
                                         <td class="ftodo muted">{{ todo.content }}</td>
                                         <td class="todo">{{ todo.add_time }}</td>
                                         <td class="todo">{{ todo.resolve_time }}</td>
+                                        <td class="todo">{{ todo.invested_time }}</td>
                                         <td class="te">
                                             <div class="span2">
                                                 <a href="{% url 'back' todo.todo_id %}"
@@ -324,7 +383,7 @@
                     <textarea name="todo" class="txtodo" id="txtodo" required="required">
                     </textarea>
                     <fieldset>
-                        {#                        <label class="radio inline" for="owner">#}
+                        {#<label class="radio inline" for="owner">#}
                         <input type="radio" name="owner" value="{{ user }}"/>
                         <span class="label label-warning">{{ user }}</span>
                         {#                        </label>#}
@@ -350,6 +409,61 @@
                         </span>{#<input type="text" class="form-control" aria-label="...">#}
                         {#                        </div><!-- /input-group -->#}
                     </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">
+                        Close
+                    </button>
+                    <button id="send" class="btn btn-success" type="submit"
+                            name="submit">Save changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade in" id="myModal1" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                </button>
+                <h3 id="myModalLabel1">请输入投入时间</h3>
+            </div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="modal-body">投入时间：
+                    <input name="investe" class="txtodo" id="txtodo" required="required">
+                    </input>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">
+                        Close
+                    </button>
+                    <button id="send" class="btn btn-success" type="submit"
+                            name="submit">Save changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade in" id="myModal2" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                </button>
+                <h3 id="myModalLabel2">请输入投入时间</h3>
+            </div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="modal-body">投入时间：
+                    <input name="invested" class="txtodo" id="txtodo" required="required">
+                    </input>
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">

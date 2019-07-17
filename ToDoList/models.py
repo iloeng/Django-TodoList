@@ -17,10 +17,11 @@ class ToDo(models.Model):
     resolve_time = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=4, default='No')
     finish = models.CharField(max_length=4, default='No')
+    invested_time = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
 
     def __str__(self):
         # return '%d %s %s %s' % (self.todo_id, self.owner, self.content, self.status)
-        return '%s %s %s %s' % (self.owner, self.content, self.status, self.finish)
+        return '%s %s %s %s %s' % (self.owner, self.content, self.status, self.finish, self.invested_time)
 
     class Meta:
         ordering = ['add_time', 'status']
