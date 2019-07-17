@@ -88,8 +88,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'todo',
         'USER': 'root',
-        'PASSWORD': 'hillstone',
-        'HOST': '',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
         'PORT': '',
     }
 }

@@ -17,22 +17,6 @@ USER = {
     '碧莹': 7,
     '张真': 8
 }
-# def all_list(request):
-#     todo_list = ToDo.objects.all()
-#     content = {'todos': todo_list}
-#     return render(request, 'index.html', content)
-#
-#
-# def todo_create(request, owner):
-#     if request.method == "POST":
-#         todo_post_form = ToDoPostForm(data=request.POST)
-#         if todo_post_form.is_valid():
-#             new_todo = todo_post_form.save(commit=False)
-#             new_todo.owner = owner
-#             new_todo.save()
-#             return redirect("index")
-#         else:
-#             return HttpResponse("表单内容有误，请重新填写！")
 
 
 def todolist(request):
@@ -55,8 +39,22 @@ def finish_reappear(request, id):
             todo.finish = 'Yes'
             todo.invested_time = invested
             todo.save()
-            return HttpResponseRedirect('/')
-    return HttpResponseRedirect('/')
+            todolist = ToDo.objects.filter(status='No').order_by('-owner')
+            finishtodos = ToDo.objects.filter(status='Yes').order_by('-resolve_time')
+            # for todo in todolist:
+            reappear = ToDo.objects.filter(status='Yes', finish='Yes').order_by('-resolve_time')
+            unreappear = ToDo.objects.filter(status='Yes', finish='No').order_by('-resolve_time')
+            dicts = {'todolist': todolist, 'finished': finishtodos,
+                     'reappear': reappear, 'unreappear': unreappear}
+            return render(request, 'index.html', dicts)
+    todolist = ToDo.objects.filter(status='No').order_by('-owner')
+    finishtodos = ToDo.objects.filter(status='Yes').order_by('-resolve_time')
+    # for todo in todolist:
+    reappear = ToDo.objects.filter(status='Yes', finish='Yes').order_by('-resolve_time')
+    unreappear = ToDo.objects.filter(status='Yes', finish='No').order_by('-resolve_time')
+    dicts = {'todolist': todolist, 'finished': finishtodos,
+             'reappear': reappear, 'unreappear': unreappear}
+    return render(request, 'index.html', dicts)
 
 
 def finish_unreappear(request, id):
@@ -68,8 +66,22 @@ def finish_unreappear(request, id):
             todo.finish = 'No'
             todo.invested_time = invested
             todo.save()
-            return HttpResponseRedirect('/')
-    return HttpResponseRedirect('/')
+            todolist = ToDo.objects.filter(status='No').order_by('-owner')
+            finishtodos = ToDo.objects.filter(status='Yes').order_by('-resolve_time')
+            # for todo in todolist:
+            reappear = ToDo.objects.filter(status='Yes', finish='Yes').order_by('-resolve_time')
+            unreappear = ToDo.objects.filter(status='Yes', finish='No').order_by('-resolve_time')
+            dicts = {'todolist': todolist, 'finished': finishtodos,
+                     'reappear': reappear, 'unreappear': unreappear}
+            return render(request, 'index.html', dicts)
+    todolist = ToDo.objects.filter(status='No').order_by('-owner')
+    finishtodos = ToDo.objects.filter(status='Yes').order_by('-resolve_time')
+    # for todo in todolist:
+    reappear = ToDo.objects.filter(status='Yes', finish='Yes').order_by('-resolve_time')
+    unreappear = ToDo.objects.filter(status='Yes', finish='No').order_by('-resolve_time')
+    dicts = {'todolist': todolist, 'finished': finishtodos,
+             'reappear': reappear, 'unreappear': unreappear}
+    return render(request, 'index.html', dicts)
 
 
 def todoback(request, id):
@@ -80,7 +92,14 @@ def todoback(request, id):
 
         todo.invested_time = 0.0
         todo.save()
-        return HttpResponseRedirect('/')
+        todolist = ToDo.objects.filter(status='No').order_by('-owner')
+        finishtodos = ToDo.objects.filter(status='Yes').order_by('-resolve_time')
+        # for todo in todolist:
+        reappear = ToDo.objects.filter(status='Yes', finish='Yes').order_by('-resolve_time')
+        unreappear = ToDo.objects.filter(status='Yes', finish='No').order_by('-resolve_time')
+        dicts = {'todolist': todolist, 'finished': finishtodos,
+                 'reappear': reappear, 'unreappear': unreappear}
+        return render(request, 'index.html', dicts)
     todolist = ToDo.objects.filter(status='No')
     finishtodo = ToDo.objects.filter(status='Yes')
     return render(request, 'index.html', {'todolist': todolist, 'finished': finishtodo})
@@ -91,9 +110,14 @@ def tododelete(request, id):
     if todo:
         todo.delete()
         return HttpResponseRedirect('/')
-    todolist = ToDo.objects.filter(flag='No')
-    finishtodo = ToDo.objects.filter(flag='Yes')
-    return render(request, 'index.html', {'todolist': todolist, 'finished': finishtodo})
+    todolist = ToDo.objects.filter(status='No').order_by('-owner')
+    finishtodos = ToDo.objects.filter(status='Yes').order_by('-resolve_time')
+    # for todo in todolist:
+    reappear = ToDo.objects.filter(status='Yes', finish='Yes').order_by('-resolve_time')
+    unreappear = ToDo.objects.filter(status='Yes', finish='No').order_by('-resolve_time')
+    dicts = {'todolist': todolist, 'finished': finishtodos,
+             'reappear': reappear, 'unreappear': unreappear}
+    return render(request, 'index.html', dicts)
 
 
 def add_todo(request):
@@ -105,14 +129,24 @@ def add_todo(request):
 
         todo = ToDo(owner=owner, content=atodo.strip(), status='No', finish='No')
         todo.save()
-        todolist = ToDo.objects.filter(status='No')
-        finishtodos = ToDo.objects.filter(status='Yes')
-        return HttpResponseRedirect('/')
+        todolist = ToDo.objects.filter(status='No').order_by('-owner')
+        finishtodos = ToDo.objects.filter(status='Yes').order_by('-resolve_time')
+        # for todo in todolist:
+        reappear = ToDo.objects.filter(status='Yes', finish='Yes').order_by('-resolve_time')
+        unreappear = ToDo.objects.filter(status='Yes', finish='No').order_by('-resolve_time')
+        dicts = {'todolist': todolist, 'finished': finishtodos,
+                 'reappear': reappear, 'unreappear': unreappear}
+        return render(request, 'index.html', dicts)
 
     else:
-        todolist = ToDo.objects.filter(status='No')
-        finishtodos = ToDo.objects.filter(status='Yes')
-        return render(request, 'index.html', {'todolist': todolist, 'finishtodos': finishtodos})
+        todolist = ToDo.objects.filter(status='No').order_by('-owner')
+        finishtodos = ToDo.objects.filter(status='Yes').order_by('-resolve_time')
+        # for todo in todolist:
+        reappear = ToDo.objects.filter(status='Yes', finish='Yes').order_by('-resolve_time')
+        unreappear = ToDo.objects.filter(status='Yes', finish='No').order_by('-resolve_time')
+        dicts = {'todolist': todolist, 'finished': finishtodos,
+                 'reappear': reappear, 'unreappear': unreappear}
+        return render(request, 'index.html', dicts)
 
 
 def update_todo(request, id):
@@ -134,7 +168,14 @@ def update_todo(request, id):
         finishtodos = ToDo.objects.filter(status='Yes')
         # return render(request, 'index.html',
         #               {'todolist': todolist, 'finished': finishtodos})
-        return HttpResponseRedirect('/')
+        todolist = ToDo.objects.filter(status='No').order_by('-owner')
+        finishtodos = ToDo.objects.filter(status='Yes').order_by('-resolve_time')
+        # for todo in todolist:
+        reappear = ToDo.objects.filter(status='Yes', finish='Yes').order_by('-resolve_time')
+        unreappear = ToDo.objects.filter(status='Yes', finish='No').order_by('-resolve_time')
+        dicts = {'todolist': todolist, 'finished': finishtodos,
+                 'reappear': reappear, 'unreappear': unreappear}
+        return render(request, 'index.html', dicts)
 
     else:
         todo = ToDo.objects.get(todo_id=id)

@@ -9,7 +9,7 @@ from datetime import datetime
 
 class ToDo(models.Model):
     # user = models.ForeignKey(User)
-    todo_id = models.IntegerField(primary_key=True)
+    todo_id = models.AutoField(primary_key=True)
     owner = models.CharField(max_length=10)
     content = models.TextField()
     # flag = models.CharField()
