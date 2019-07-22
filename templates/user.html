@@ -104,18 +104,18 @@
                                         <td class="te">
                                             <div class="span2">
                                                 <script type="text/javascript">
-                                                        function sendtwitter1() {
-                                                            $('#myModal1 form').submit(function () {
+                                                        function sendtwitter{{ todo.todo_id }}1() {
+                                                            $('#myModal{{ todo.todo_id }}1 form').submit(function () {
                                                                 $.ajax({
                                                                     type: "POST",
-                                                                    data: $('#myModal1 form').serialize(),
+                                                                    data: $('#myModal{{ todo.todo_id }}1 form').serialize(),
                                                                     url: "{% url 'success' todo.todo_id %}",
                                                                     cache: false,
                                                                     dataType: "html",
                                                                     success: function (html, textStatus) {
                                                                         $('#todo').replaceWith(html);
-                                                                        $('#myModal1').modal('hide');
-                                                                        $('#myModal1 form')[0].reset();
+                                                                        $('#myModal{{ todo.todo_id }}1').modal('hide');
+                                                                        $('#myModal{{ todo.todo_id }}1 form')[0].reset();
                                                                     },
                                                                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                                                                         $('#comment_form form').replaceWith('Your comment was unable to be posted at this time.  We apologise for the inconvenience.');
@@ -126,26 +126,26 @@
                                                         }
 
                                                         $(document).ready(function () {
-                                                            sendtwitter1();
+                                                            sendtwitter{{ todo.todo_id }}1();
                                                         })
                                                     </script>
 
                                                     <a title="复现完成" rel="nofollow"
-                                                       href="#myModal1" data-toggle="modal" class="button">
+                                                       href="#myModal{{ todo.todo_id }}1" data-toggle="modal" class="button">
                                                         <i class="glyphicon glyphicon-check"></i></a>
                                                     <script type="text/javascript">
-                                                        function sendtwitter2() {
-                                                            $('#myModal2 form').submit(function () {
+                                                        function sendtwitter{{ todo.todo_id }}2() {
+                                                            $('#myModal{{ todo.todo_id }}2 form').submit(function () {
                                                                 $.ajax({
                                                                     type: "POST",
-                                                                    data: $('#myModal2 form').serialize(),
+                                                                    data: $('#myModal{{ todo.todo_id }}2 form').serialize(),
                                                                     url: "{% url 'failed' todo.todo_id %}",
                                                                     cache: false,
                                                                     dataType: "html",
                                                                     success: function (html, textStatus) {
                                                                         $('#todo').replaceWith(html);
-                                                                        $('#myModal2').modal('hide');
-                                                                        $('#myModal2 form')[0].reset();
+                                                                        $('#myModal{{ todo.todo_id }}2').modal('hide');
+                                                                        $('#myModal{{ todo.todo_id }}2 form')[0].reset();
                                                                     },
                                                                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                                                                         $('#comment_form form').replaceWith('Your comment was unable to be posted at this time.  We apologise for the inconvenience.');
@@ -156,11 +156,11 @@
                                                         }
 
                                                         $(document).ready(function () {
-                                                            sendtwitter2();
+                                                            sendtwitter{{ todo.todo_id }}2();
                                                         })
                                                     </script>
                                                     <a title="复现失败" rel="nofollow"
-                                                       href="#myModal2" data-toggle="modal" class="button">
+                                                       href="#myModal{{ todo.todo_id }}2" data-toggle="modal" class="button">
                                                         <i class="glyphicon glyphicon-ok"></i></a>
                                                 <a href="{% url 'update' todo.todo_id %}"
                                                    title="edit"><i
@@ -399,14 +399,15 @@
         </div>
     </div>
 </div>
-<div class="modal fade in" id="myModal1" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel1" aria-hidden="true">
+{% for todo in todolist %}
+<div class="modal fade in" id="myModal{{ todo.todo_id }}1" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel{{ todo.todo_id }}1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
                 </button>
-                <h3 id="myModalLabel1">请输入投入时间</h3>
+                <h3 id="myModalLabel{{ todo.todo_id }}1">请输入投入时间</h3>
             </div>
             <form action="" method="post">
                 {% csrf_token %}
@@ -427,14 +428,14 @@
     </div>
 </div>
 
-<div class="modal fade in" id="myModal2" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel2" aria-hidden="true">
+<div class="modal fade in" id="myModal{{ todo.todo_id }}2" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel{{ todo.todo_id }}2" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
                 </button>
-                <h3 id="myModalLabel2">请输入投入时间</h3>
+                <h3 id="myModalLabel{{ todo.todo_id }}2">请输入投入时间</h3>
             </div>
             <form action="" method="post">
                 {% csrf_token %}
@@ -454,6 +455,7 @@
         </div>
     </div>
 </div>
+{% endfor %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
